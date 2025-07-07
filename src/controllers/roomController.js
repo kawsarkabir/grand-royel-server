@@ -1,6 +1,6 @@
-import Room from "../models/Room";
+import Room from "../models/Room.js";
 
-const getAllRooms = async (req, res) => {
+export const getAllRooms = async (req, res) => {
   try {
     const rooms = await Room.find();
     res.json(rooms);

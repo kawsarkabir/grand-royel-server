@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const roomSchema = new mongoose.Schema({
   name: String,
   description: String,
@@ -9,5 +11,7 @@ const roomSchema = new mongoose.Schema({
   location: String,
   isAvailable: Boolean,
 });
+
 const Room = mongoose.model("Room", roomSchema);
+
 export default Room;
