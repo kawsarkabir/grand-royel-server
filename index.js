@@ -15,10 +15,6 @@ app.use(express.json());
 
 app.use("/api/rooms", roomRoutes);
 app.use("/api/bookings", bookingRoutes);
-app.use((req, res, next) => {
-  console.log("Request received:", req.method, req.originalUrl);
-  next();
-});
 
 app.get("/", (req, res) => {
   res.send("Hotel Booking API Running...");

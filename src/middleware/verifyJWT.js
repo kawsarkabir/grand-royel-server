@@ -1,16 +1,13 @@
 import jwt from "jsonwebtoken";
 
-const verifyJWT = (req, res, next) => {
+export const verifyJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
-
-  if (!token) return res.status(401).json({ message: "Unauthorized access" });
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Forbidden access" });
-
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
-  });
+  } catch {
+    res.status(403).json({ message: "Invalid token" });
+  }
 };
-
-export default verifyJWT;
