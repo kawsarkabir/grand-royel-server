@@ -7,7 +7,12 @@ const roomSchema = new mongoose.Schema({
   images: [String],
   rating: { type: Number, default: 0 },
   totalReviews: { type: Number, default: 0 },
-  amenities: [String],
+  amenities: [
+    {
+      name: { type: String, required: true },
+      icon: { type: String, required: true },
+    },
+  ],
   guests: Number,
   beds: Number,
   bathrooms: Number,
