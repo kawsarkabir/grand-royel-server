@@ -1,17 +1,25 @@
 import mongoose from "mongoose";
 
 const roomSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true },
   description: String,
-  price: Number,
-  image: String,
-  rating: Number,
-  reviews: Number,
+  price: { type: Number, required: true },
+  images: [String],
+  rating: { type: Number, default: 0 },
+  totalReviews: { type: Number, default: 0 },
   amenities: [String],
+  guests: Number,
+  beds: Number,
+  bathrooms: Number,
+  host: {
+    name: String,
+    joined: String,
+    superhost: Boolean,
+    avatar: String,
+  },
   location: String,
-  isAvailable: Boolean,
+  isAvailable: { type: Boolean, default: true },
 });
 
 const Room = mongoose.model("Room", roomSchema);
-
 export default Room;
