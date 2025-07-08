@@ -38,5 +38,11 @@ app.get("/api/rooms", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+// GET Single Room
+app.get("/api/rooms/:id", async (req, res) => {
+  const room = await Room.findById(req.params.id);
+  if (!room) return res.status(404).json({ error: "Room not found" });
+  res.json(room);
+});
 
 app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
