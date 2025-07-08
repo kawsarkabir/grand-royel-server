@@ -1,24 +1,42 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import connectDB from "./src/config/db.js";
-
-import roomRoutes from "./src/routes/roomRoutes.js";
-import bookingRoutes from "./src/routes/bookingRoutes.js";
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
 dotenv.config();
-connectDB();
-
 const app = express();
-app.use(cors());
+const port = process.env.PORT || 5000;
+
+const corsOptions = {
+  origin: ["http://localhost:3000"], // your frontend URL here
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use("/api/rooms", roomRoutes);
-app.use("/api/bookings", bookingRoutes);
-
-app.get("/", (req, res) => {
-  res.send("Hotel Booking API Running...");
+const RoomSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  image: String,
+  available: Boolean,
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const Room = mongoose.model("Room", RoomSchema);
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Error:", err));
+
+app.get("/api/rooms", async (req, res) => {
+  try {
+    const rooms = await Room.find({});
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
