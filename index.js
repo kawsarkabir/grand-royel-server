@@ -75,11 +75,30 @@ const ReviewSchema = new mongoose.Schema({
     ref: "Room",
     required: true,
   },
-  userEmail: { type: String, required: true },
-  rating: { type: Number, min: 1, max: 5, required: true },
-  comment: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
+  username: {
+    type: String,
+    required: true,
+  },
+  userEmail: {
+    type: String,
+    required: true,
+  },
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
+
 const Review = mongoose.model("Review", ReviewSchema);
 
 // ========= MongoDB Connection =========
@@ -205,11 +224,13 @@ app.delete("/api/bookings/:id", verifyFirebaseToken, async (req, res) => {
 
 // Submit a review
 app.post("/api/reviews", verifyFirebaseToken, async (req, res) => {
-  const { roomId, rating, comment } = req.body;
+  const { roomId, rating, comment, username } = req.body;
+  console.log(req.body);
   const userEmail = req.user.email;
 
   try {
     const review = await Review.create({
+      username,
       roomId,
       userEmail,
       rating,
