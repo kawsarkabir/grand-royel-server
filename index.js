@@ -45,7 +45,7 @@ const RoomSchema = new mongoose.Schema({
   name: String,
   description: String,
   price: Number,
-  images: [String], // array of image URLs
+  images: [String],
   available: { type: Boolean, default: true },
   rating: { type: Number, default: 0 },
   totalReviews: { type: Number, default: 0 },
@@ -213,13 +213,20 @@ app.patch("/api/bookings/:id", verifyFirebaseToken, async (req, res) => {
 });
 
 // Delete a booking
-app.delete("/api/bookings/:id", verifyFirebaseToken, async (req, res) => {
-  const booking = await Booking.findById(req.params.id);
-  if (!booking) return res.status(404).json({ error: "Booking not found" });
+app.delete("/api/bookings/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const booking = await Booking.findByIdAndDelete(id);
 
-  await Room.findByIdAndUpdate(booking.roomId, { available: true });
-  await Booking.findByIdAndDelete(req.params.id);
-  res.json({ message: "Booking cancelled" });
+    // ❗ Make the room available again
+    if (booking) {
+      await Room.findByIdAndUpdate(booking.roomId, { available: true });
+    }
+
+    res.status(200).json({ message: "Booking cancelled successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to cancel booking" });
+  }
 });
 
 // Submit a review
