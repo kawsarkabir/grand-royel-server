@@ -79,6 +79,10 @@ const ReviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  photoURL: {
+    type: String,
+    required: true,
+  },
   userEmail: {
     type: String,
     required: true,
@@ -231,13 +235,14 @@ app.delete("/api/bookings/:id", async (req, res) => {
 
 // Submit a review
 app.post("/api/reviews", verifyFirebaseToken, async (req, res) => {
-  const { roomId, rating, comment, username } = req.body;
+  const { roomId, rating, comment, username, photoURL } = req.body;
   console.log(req.body);
   const userEmail = req.user.email;
 
   try {
     const review = await Review.create({
       username,
+      photoURL,
       roomId,
       userEmail,
       rating,
@@ -259,6 +264,15 @@ app.post("/api/reviews", verifyFirebaseToken, async (req, res) => {
   } catch (err) {
     console.error("Review failed:", err);
     res.status(500).json({ error: "Failed to submit review" });
+  }
+});
+
+app.get("/api/reviews", async (req, res) => {
+  try {
+    const rooms = await Review.find({});
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 
