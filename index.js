@@ -189,15 +189,16 @@ app.post("/api/bookings", verifyFirebaseToken, async (req, res) => {
 app.get("/api/my-bookings", verifyFirebaseToken, async (req, res) => {
   try {
     const bookings = await Booking.find({ userEmail: req.user.email });
-
+console.log(req.body)
     const populated = await Promise.all(
       bookings.map(async (booking) => {
         const room = await Room.findById(booking.roomId);
+        console.log(room)
         return {
           id: booking._id,
           roomId: room._id,
           roomName: room.name,
-          roomImage: room.image,
+          roomImage: room.images[0],
           price: room.price,
           bookedDate: booking.date,
           status: "confirmed",
