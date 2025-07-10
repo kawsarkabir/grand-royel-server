@@ -288,4 +288,8 @@ app.get("/api/reviews", async (req, res) => {
 });
 
 // ========= Start Server =========
+// Start server
+app.get("/", (req, res) => {
+  res.send(`🚀 Gardenly Server running on port ${port}`);
+});
 app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
