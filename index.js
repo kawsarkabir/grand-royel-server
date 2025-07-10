@@ -113,12 +113,23 @@ mongoose
 
 // ========= Routes =========
 
-// Get all rooms
+// Get all rooms with optional price filtering
 app.get("/api/rooms", async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
+
+  const filter = {};
+
+  if (minPrice || maxPrice) {
+    filter.price = {};
+    if (minPrice) filter.price.$gte = Number(minPrice);
+    if (maxPrice) filter.price.$lte = Number(maxPrice);
+  }
+
   try {
-    const rooms = await Room.find({});
+    const rooms = await Room.find(filter);
     res.json(rooms);
   } catch (err) {
+    console.error("Failed to fetch rooms:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -236,7 +247,6 @@ app.delete("/api/bookings/:id", async (req, res) => {
 // Submit a review
 app.post("/api/reviews", verifyFirebaseToken, async (req, res) => {
   const { roomId, rating, comment, username, photoURL } = req.body;
-  console.log(req.body);
   const userEmail = req.user.email;
 
   try {
