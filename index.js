@@ -1,5 +1,3 @@
-// index.js
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -19,7 +17,12 @@ admin.initializeApp({
 });
 
 // ========= Middleware =========
-app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://grand-royel.vercel.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const verifyFirebaseToken = async (req, res, next) => {
