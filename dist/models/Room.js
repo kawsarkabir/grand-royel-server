@@ -1,0 +1,21 @@
+import mongoose, { Schema } from "mongoose";
+const RoomSchema = new Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    images: { type: [String], required: true },
+    available: { type: Boolean, default: true },
+    rating: { type: Number, default: 0 },
+    totalReviews: { type: Number, default: 0 },
+    guests: { type: Number, required: true },
+    beds: { type: Number, required: true },
+    bathrooms: { type: Number, required: true },
+    location: { type: String, required: true },
+    host: {
+        name: { type: String, required: true },
+        joined: { type: String, required: true },
+        superhost: { type: Boolean, required: true },
+        avatar: { type: String, required: true },
+    },
+}, { timestamps: true });
+export default mongoose.model("Room", RoomSchema);
