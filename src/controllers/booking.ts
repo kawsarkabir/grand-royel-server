@@ -34,29 +34,46 @@ export const createBooking = async (req: Request, res: Response) => {
   }
 };
 
+// controllers/booking.controller.ts
 export const getUserBookings = async (req: Request, res: Response) => {
-  try {
-    const bookings = await Booking.find({ userEmail: req.user?.email });
+  console.log("Received request for bookings with user:", req.user);
 
-    const populatedBookings = await Promise.all(
+  try {
+    if (!req.user?.email) {
+      console.error("No user email found in request");
+      return res
+        .status(401)
+        .json({ error: "Unauthorized - User email missing" });
+    }
+
+    const bookings = await Booking.find({ userEmail: req.user.email });
+    console.log("Found bookings:", bookings);
+
+    const populated = await Promise.all(
       bookings.map(async (booking) => {
         const room = await Room.findById(booking.roomId);
+        if (!room) {
+          console.warn(`Room not found for booking ${booking._id}`);
+          return null;
+        }
         return {
           id: booking._id,
-          roomId: room?._id,
-          roomName: room?.name,
-          roomImage: room?.images[0],
-          price: room?.price,
+          roomId: room._id,
+          roomName: room.name,
+          roomImage: room.images[0],
+          price: room.price,
           bookedDate: booking.date,
           status: "confirmed",
         };
       })
     );
 
-    res.json(populatedBookings);
+    const validBookings = populated.filter(Boolean);
+    console.log("Processed bookings:", validBookings);
+    res.json(validBookings);
   } catch (err) {
-    console.error("Failed to fetch bookings:", err);
-    res.status(500).json({ error: "Server error" });
+    console.error("Bookings error:", err);
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
