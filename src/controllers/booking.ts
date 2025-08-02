@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Room from "../models/Room.js";
-import Booking from "../models/Booking.js";
+import Room from "../models/Room.ts";
+import Booking from "../models/Booking.ts";
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
@@ -34,7 +34,6 @@ export const createBooking = async (req: Request, res: Response) => {
   }
 };
 
-// controllers/booking.controller.ts
 export const getUserBookings = async (req: Request, res: Response) => {
   console.log("Received request for bookings with user:", req.user);
 

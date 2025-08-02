@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import roomRoutes from "./src/routes/room.js";
-import bookingRoutes from "./src/routes/booking.js";
-import reviewRoutes from "./src/routes/review.js";
+import roomRoutes from "./src/routes/room.ts";
+import bookingRoutes from "./src/routes/booking.ts";
+import reviewRoutes from "./src/routes/review.ts";
 
 dotenv.config();
 

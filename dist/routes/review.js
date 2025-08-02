@@ -1,6 +1,6 @@
 import express from "express";
-import { verifyFirebaseToken } from "../middleware/auth.js";
-import { createReview, getAllReviews, getRoomReviews } from "../controllers/review.js";
+import { verifyFirebaseToken } from "../middleware/auth.ts";
+import { createReview, getAllReviews, getRoomReviews } from "../controllers/review.ts";
 const router = express.Router();
 router.get("/", getAllReviews);
 router.get("/:id/reviews", getRoomReviews);

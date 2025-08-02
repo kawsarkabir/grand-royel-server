@@ -1,4 +1,4 @@
-import Room from "../models/Room.js";
+import Room from "../models/Room.ts";
 export const getAllRooms = async (req, res) => {
     try {
         const { minPrice, maxPrice } = req.query;

@@ -1,4 +1,4 @@
-import admin from "../config/firebase.js";
+import admin from "../config/firebase.ts";
 export const verifyFirebaseToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
