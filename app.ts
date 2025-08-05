@@ -12,7 +12,11 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: ["https://grand-royel.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://grand-royel.vercel.app",
+      "https://grand-royel-server.vercel.app",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );
