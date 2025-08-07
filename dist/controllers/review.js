@@ -1,5 +1,5 @@
-import Review from "../models/Review.ts";
-import Room from "../models/Room.ts";
+import Review from "../models/Review";
+import Room from "../models/Room";
 export const getRoomReviews = async (req, res) => {
     try {
         const reviews = await Review.find({ roomId: req.params.id }).sort({

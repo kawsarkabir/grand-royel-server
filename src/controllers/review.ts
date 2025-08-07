@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Review from "../models/Review.ts";
-import Room from "../models/Room.ts";
+import Review from "../models/Review";
+import Room from "../models/Room";
 
 export const getRoomReviews = async (req: Request, res: Response) => {
   try {

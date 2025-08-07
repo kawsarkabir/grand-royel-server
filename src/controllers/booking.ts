@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Room from "../models/Room.ts";
-import Booking from "../models/Booking.ts";
+import Room from "../models/Room";
+import Booking from "../models/Booking";
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
@@ -71,8 +71,8 @@ export const getUserBookings = async (req: Request, res: Response) => {
     console.log("Processed bookings:", validBookings);
     res.json(validBookings);
   } catch (err) {
-    console.error("Bookings error:", err);
-    res.status(500).json({ error: "Server error", details: err.message });
+    const error = err as Error;
+    res.status(500).json({ error: "Server error", details: error.message });
   }
 };
 

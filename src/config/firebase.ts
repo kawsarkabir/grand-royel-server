@@ -2,10 +2,15 @@ import dotenv from "dotenv";
 import admin from "firebase-admin";
 dotenv.config();
 
-const fileData = Buffer.from(
-  process.env.FIREBASE_SERVICES_KEY,
-  "base64"
-).toString("utf8");
+const firebaseKey = process.env.FIREBASE_SERVICES_KEY;
+
+if (!firebaseKey) {
+  throw new Error(
+    "FIREBASE_SERVICES_KEY is not defined in environment variables."
+  );
+}
+
+const fileData = Buffer.from(firebaseKey, "base64").toString("utf8");
 
 const serviceAccount = JSON.parse(fileData);
 

@@ -1,10 +1,10 @@
 import express from "express";
-import { verifyFirebaseToken } from "../middleware/auth.ts";
+import { verifyFirebaseToken } from "../middleware/auth";
 import {
   createReview,
   getAllReviews,
   getRoomReviews,
-} from "../controllers/review.ts";
+} from "../controllers/review";
 
 const router = express.Router();
 
