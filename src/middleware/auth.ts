@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import admin from "../config/firebase.ts";
+import admin from "../config/firebase.js";
 
 declare global {
   namespace Express {

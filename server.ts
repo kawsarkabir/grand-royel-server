@@ -1,5 +1,5 @@
-import app from "./app.ts";
-import connectDB from "./src/config/db.ts";
+import app from "./app.js";
+import connectDB from "./src/config/db.js";
 
 const port = process.env.PORT || 5000;
 
