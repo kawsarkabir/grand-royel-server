@@ -91,6 +91,45 @@ export const getRoomById = async (req: Request, res: Response) => {
   }
 };
 
+export const updateRoom = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid room ID format",
+      });
+    }
+
+    const updatedRoom = await Room.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedRoom) {
+      return res.status(404).json({
+        success: false,
+        message: "Room not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Room updated successfully",
+      data: updatedRoom,
+    });
+  } catch (error) {
+    console.error("Error updating room:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
 export const deleteRoom = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
