@@ -1,6 +1,6 @@
-# 🏨 Hotelio Backend - Hotel Booking Platform
+# 🏨 Grand Royel Backend - Hotel Booking Platform
 
-This is the backend API for **Hotelio**, a modern hotel booking platform. Built using **Node.js**, **Express.js**, and **MongoDB**, this server handles room listings, bookings, user authentication (with Firebase or JWT), and admin operations.
+This is the backend API for **Grand Royel**, a modern hotel booking platform. Built using **Node.js**, **Express.js**, and **MongoDB**, this server handles room listings, bookings, user authentication (with Firebase or JWT), and admin operations.
 
 ---
 
@@ -32,11 +32,9 @@ This is the backend API for **Hotelio**, a modern hotel booking platform. Built 
 ### 1. Clone the repository:
 
 ```bash
-git clone https://github.com/kawsarkabir/grand-royel.git
-cd grand-royel
+git clone https://github.com/kawsarkabir/grand-royel-server.git
+cd grand-royel-server
 ```
-
-````
 
 ### 2. Install dependencies:
 
@@ -48,9 +46,9 @@ npm install
 
 ```env
 PORT=5000
-MONGODB_URI=your_mongo_connection_string
-JWT_SECRET=your_secret_key
-CORS_ORIGIN=http://localhost:5173
+MONGO_URI=your_mongo_uri
+API_VERSION=v1
+FIREBASE_SERVICES_KEY=your_firebase_services_key
 ```
 
 > ✅ Replace values with actual credentials
@@ -81,7 +79,6 @@ npm start
 | ------ | -------------- | -------------------------- |
 | POST   | `/auth/signup` | Register new user          |
 | POST   | `/auth/signin` | Login user (returns token) |
-| GET    | `/auth/me`     | Get current user info      |
 
 ### Rooms
 
@@ -95,11 +92,11 @@ npm start
 
 ### Bookings
 
-| Method | Endpoint         | Description       |
-| ------ | ---------------- | ----------------- |
-| POST   | `/bookings`      | Book a room       |
-| GET    | `/bookings`      | List all bookings |
-| GET    | `/bookings/user` | Get user bookings |
+| Method | Endpoint                | Description       |
+| ------ | ----------------------- | ----------------- |
+| POST   | `/bookings`             | Book a room       |
+| GET    | `/bookings`             | List all bookings |
+| GET    | `/bookings/my-bookings` | Get user bookings |
 
 ---
 
@@ -125,15 +122,3 @@ src/
 ├── utils/
 └── index.js
 ```
-
----
-
-## ✅ Todo (optional)
-
-- [ ] Admin dashboard APIs
-- [ ] Review system
-- [ ] Payment integration
-- [ ] Booking cancellation support
-
----
-````

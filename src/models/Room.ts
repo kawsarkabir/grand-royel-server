@@ -39,6 +39,7 @@ const RoomSchema: Schema = new Schema(
       superhost: { type: Boolean, required: true },
       avatar: { type: String, required: true },
     },
+    amenities: { type: Array, required: true },
   },
   { timestamps: true }
 );
