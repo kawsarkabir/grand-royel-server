@@ -2,13 +2,10 @@ import admin from "firebase-admin";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-const fileData = Buffer.from(
-  process.env.FIREBASE_SERVICES_KEY,
-  "base64"
-).toString("utf8");
-
-const serviceAccount = JSON.parse(fileData);
+const firebaseServiceKey = process.env.FIREBASE_SERVICES_KEY as string;
+const serviceAccount = JSON.parse(
+  Buffer.from(firebaseServiceKey, "base64").toString("utf8")
+);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

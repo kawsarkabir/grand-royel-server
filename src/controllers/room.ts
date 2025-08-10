@@ -3,7 +3,6 @@ import Room from "../models/Room.js";
 
 export const addRoom = async (req: Request, res: Response) => {
   try {
-    // Validate required fields
     const requiredFields = [
       "name",
       "description",
@@ -21,7 +20,6 @@ export const addRoom = async (req: Request, res: Response) => {
       }
     }
 
-    // Validate host object
     const requiredHostFields = ["name", "joined", "superhost", "avatar"];
     for (const field of requiredHostFields) {
       if (!req.body.host[field] && field !== "superhost") {
@@ -29,33 +27,24 @@ export const addRoom = async (req: Request, res: Response) => {
       }
     }
 
-    // Create new room
     const room = new Room({
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
-      images: req.body.images || [],
-      guests: req.body.guests,
-      beds: req.body.beds,
-      bathrooms: req.body.bathrooms,
-      location: req.body.location,
-      amenities: req.body.amenities || [],
+      ...req.body,
       host: {
         name: req.body.host.name,
         joined: req.body.host.joined,
         superhost: req.body.host.superhost || false,
         avatar: req.body.host.avatar,
       },
-      available: req.body.available !== undefined ? req.body.available : true,
+      available: req.body.available ?? true,
       rating: req.body.rating || 0,
       totalReviews: req.body.totalReviews || 0,
     });
 
     const savedRoom = await room.save();
     res.status(201).json(savedRoom);
-  } catch (err) {
-    console.error("Failed to add room:", err);
-    res.status(500).json({ error: "Server error" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    res.status(500).json({ error: message });
   }
 };
 
@@ -72,30 +61,34 @@ export const getAllRooms = async (req: Request, res: Response) => {
 
     const rooms = await Room.find(filter);
     res.json(rooms);
-  } catch (err) {
-    console.error("Failed to fetch rooms:", err);
-    res.status(500).json({ error: "Server error" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    res.status(500).json({ error: message });
   }
 };
 
-export const getRoomById = async (req: Request, res: Response) => {
+export const getRoomById = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   try {
     const room = await Room.findById(req.params.id);
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
     }
     res.json(room);
-  } catch (err) {
-    console.error("Failed to fetch room:", err);
-    res.status(500).json({ error: "Server error" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    res.status(500).json({ error: message });
   }
 };
 
-export const updateRoom = async (req: Request, res: Response) => {
+export const updateRoom = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
-
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({
         success: false,
@@ -103,7 +96,7 @@ export const updateRoom = async (req: Request, res: Response) => {
       });
     }
 
-    const updatedRoom = await Room.findByIdAndUpdate(id, updateData, {
+    const updatedRoom = await Room.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -121,20 +114,21 @@ export const updateRoom = async (req: Request, res: Response) => {
       data: updatedRoom,
     });
   } catch (error) {
-    console.error("Error updating room:", error);
+    const message = error instanceof Error ? error.message : String(error);
     res.status(500).json({
       success: false,
       message: "Server error",
-      error: error.message,
+      error: message,
     });
   }
 };
 
-export const deleteRoom = async (req: Request, res: Response) => {
+export const deleteRoom = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   try {
     const { id } = req.params;
-
-    // Validate the ID format
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({
         success: false,
@@ -157,11 +151,11 @@ export const deleteRoom = async (req: Request, res: Response) => {
       data: deletedRoom,
     });
   } catch (error) {
-    console.error("Error deleting room:", error);
+    const message = error instanceof Error ? error.message : String(error);
     res.status(500).json({
       success: false,
       message: "Server error",
-      error: error.message,
+      error: message,
     });
   }
 };

@@ -1,9 +1,16 @@
+import { Request, Response } from "express";
+import { DecodedIdToken } from "firebase-admin/auth";
 import User from "../models/User.js";
 import admin from "../config/firebase.js";
 
+// Create new user
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const { uid } = req.user; // From Firebase token
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const { uid } = req.user;
 
     // Check if user already exists
     const existingUser = await User.findOne({ uid });
@@ -24,21 +31,22 @@ export const createUser = async (req: Request, res: Response) => {
     });
 
     await newUser.save();
-    res.status(201).json(newUser);
+    return res.status(201).json(newUser);
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Failed to create user" });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Error creating user:", message);
+    return res.status(500).json({ error: "Failed to create user" });
   }
 };
-export const getUsers = async (req: Request, res: Response) => {
+
+// Get all users
+export const getUsers = async (_req: Request, res: Response) => {
   try {
-    // Fetch users with proper null checks
     const users = await User.find({})
       .select("_id uid email displayName photoURL role createdAt")
       .lean()
       .exec();
 
-    // Safely format the response
     const formattedUsers = users.map((user) => ({
       _id: user._id,
       uid: user.uid,
@@ -49,23 +57,29 @@ export const getUsers = async (req: Request, res: Response) => {
       createdAt: user.createdAt?.toISOString() || new Date().toISOString(),
     }));
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: formattedUsers,
     });
   } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Error fetching users:", message);
+    return res.status(500).json({
       success: false,
       error: "Failed to fetch users",
-      details:
-        process.env.NODE_ENV === "development" ? error.message : undefined,
+      details: process.env.NODE_ENV === "development" ? message : undefined,
     });
   }
 };
+
+// Delete a user
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ success: false, error: "Missing user ID" });
+    }
 
     // Prevent users from deleting themselves
     if (req.user?.uid === id) {
@@ -84,20 +98,27 @@ export const deleteUser = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    return res.status(200).json({
       success: true,
       message: "User deleted successfully",
     });
   } catch (error) {
-    console.error("Delete user error:", error);
-    res.status(500).json({
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Delete user error:", message);
+    return res.status(500).json({
       success: false,
       error: "Failed to delete user",
     });
   }
 };
+
+// Get current authenticated user
 export const getCurrentUser = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, error: "Unauthorized" });
+    }
+
     const { uid } = req.user;
     const user = await User.findOne({ uid })
       .select("_id uid email displayName photoURL role createdAt")
@@ -107,8 +128,12 @@ export const getCurrentUser = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, error: "User not found" });
     }
 
-    res.json(user);
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ success: false, error: "Failed to fetch user" });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Get current user error:", message);
+    return res
+      .status(500)
+      .json({ success: false, error: "Failed to fetch user" });
   }
 };

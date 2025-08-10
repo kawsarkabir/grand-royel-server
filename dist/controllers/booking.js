@@ -23,21 +23,17 @@ export const createBooking = async (req, res) => {
         res.status(201).json({ message: "Booking confirmed", booking: newBooking });
     }
     catch (err) {
-        console.error("Booking error:", err);
         res.status(500).json({ error: "Failed to book room" });
     }
 };
 export const getUserBookings = async (req, res) => {
-    console.log("Received request for bookings with user:", req.user);
     try {
         if (!req.user?.email) {
-            console.error("No user email found in request");
             return res
                 .status(401)
                 .json({ error: "Unauthorized - User email missing" });
         }
         const bookings = await Booking.find({ userEmail: req.user.email });
-        console.log("Found bookings:", bookings);
         const populated = await Promise.all(bookings.map(async (booking) => {
             const room = await Room.findById(booking.roomId);
             if (!room) {
@@ -55,7 +51,6 @@ export const getUserBookings = async (req, res) => {
             };
         }));
         const validBookings = populated.filter(Boolean);
-        console.log("Processed bookings:", validBookings);
         res.json(validBookings);
     }
     catch (err) {
@@ -73,7 +68,6 @@ export const updateBooking = async (req, res) => {
         res.json({ message: "Booking updated", booking });
     }
     catch (err) {
-        console.error("Failed to update booking:", err);
         res.status(500).json({ error: "Failed to update booking" });
     }
 };
@@ -87,7 +81,6 @@ export const deleteBooking = async (req, res) => {
         res.json({ message: "Booking cancelled successfully" });
     }
     catch (err) {
-        console.error("Failed to cancel booking:", err);
         res.status(500).json({ error: "Failed to cancel booking" });
     }
 };

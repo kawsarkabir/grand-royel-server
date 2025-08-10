@@ -17,5 +17,6 @@ const RoomSchema = new Schema({
         superhost: { type: Boolean, required: true },
         avatar: { type: String, required: true },
     },
+    amenities: { type: Array, required: true },
 }, { timestamps: true });
 export default mongoose.model("Room", RoomSchema);
