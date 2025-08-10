@@ -7,7 +7,4 @@ const userSchema = new Schema({
     role: { type: String, enum: ["user", "admin"], default: "user" },
     createdAt: { type: Date, default: Date.now },
 });
-// Add indexes for better query performance
-userSchema.index({ email: 1 });
-userSchema.index({ uid: 1 });
 export default mongoose.model("User", userSchema);

@@ -23,6 +23,7 @@ export const createUser = async (req, res) => {
             role: "user",
         });
         await newUser.save();
+        console.log("new user register", newUser);
         return res.status(201).json(newUser);
     }
     catch (error) {
