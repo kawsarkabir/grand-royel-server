@@ -5,7 +5,7 @@ import {
   getCurrentUser,
   getUsers,
 } from "../controllers/userController.js";
-import { verifyFirebaseToken } from "@/middleware/auth.js";
+import { verifyFirebaseToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
