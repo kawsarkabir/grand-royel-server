@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import userRoutes from "./src/routes/user.js";
 import roomRoutes from "./src/routes/room.js";
 import bookingRoutes from "./src/routes/booking.js";
 import reviewRoutes from "./src/routes/review.js";
@@ -15,6 +16,7 @@ app.use(express.json());
 const apiVersion = process.env.API_VERSION;
 
 // Routes
+app.use(`/api/${apiVersion}/users`, userRoutes);
 app.use(`/api/${apiVersion}/rooms`, roomRoutes);
 app.use(`/api/${apiVersion}/bookings`, bookingRoutes);
 app.use(`/api/${apiVersion}/reviews`, reviewRoutes);
