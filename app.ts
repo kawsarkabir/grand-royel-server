@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+// Middleware 
 app.use(cors());
 app.use(express.json());
 const apiVersion = process.env.API_VERSION;
