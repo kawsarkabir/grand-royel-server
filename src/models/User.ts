@@ -18,8 +18,4 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// Add indexes for better query performance
-userSchema.index({ email: 1 });
-userSchema.index({ uid: 1 });
-
 export default mongoose.model<IUser>("User", userSchema);

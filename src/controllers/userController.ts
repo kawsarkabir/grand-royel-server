@@ -31,6 +31,7 @@ export const createUser = async (req: Request, res: Response) => {
     });
 
     await newUser.save();
+    console.log("new user register", newUser);
     return res.status(201).json(newUser);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

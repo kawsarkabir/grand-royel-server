@@ -11,7 +11,7 @@ const router = express.Router();
 
 // Create or get user profile
 router.post("/", verifyFirebaseToken, createUser);
-router.get("/", verifyFirebaseToken, getUsers);
+router.get("/", getUsers);
 router.get("/me", verifyFirebaseToken, getCurrentUser);
 router.delete("/:id", verifyFirebaseToken, deleteUser);
 
